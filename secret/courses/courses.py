@@ -622,6 +622,8 @@ def addstudent(request):
             get_username = User.objects.get(username=username)
             AddStudent.objects.create(username=get_username, first_name=firstname, last_name=lastname,password=password)
             messages.success(request, "added")
+
+            
             return render(request,"courses/addstudent.html")
             
         else:
