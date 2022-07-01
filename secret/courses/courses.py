@@ -635,18 +635,15 @@ def addstudent(request):
             # get_username=User.objects.get(id=3)
             print("$$$$$$$") 
             get_username = User.objects.get(username=username)
-            AddStudent.objects.create(username=get_username, first_name=firstname, last_name=lastname,password=password,image_upload=files)
+            objec = AddStudent.objects.create(username=get_username, first_name=firstname, last_name=lastname,password=password,image_upload=files)
            
             users=classs.objects.filter(name=addcourses)[0]
+       
             if users:
-                created = classs.objects.filter(name=addcourses)[0]
-                AddStudent.objects.create(students=created)
-                created.students.add(addcourses)
-                print("trueeeeeee")
-                
+                objec.students.add(users) #many to many
             else:
                 classs.objects.create(name=addcourses)
-                print("falseeeeeee")
+              
 
             
 
