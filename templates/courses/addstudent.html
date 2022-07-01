@@ -23,6 +23,10 @@ label:after{
 
 
 </style>
+<a class="nav-link" href="/secret/view_image/">
+  <i class="far fa-plus-square"></i>
+    <span>View Data</span>
+</a>
 <div >
   <input id="token" type="text" name="csrfmiddlewaretoken" value="{{csrf_token}}" style="display:none">
   <div class="container-fluid">
@@ -54,17 +58,24 @@ label:after{
                 <div class="col-sm-12">
                   <div class="form-group">
                     <label class="control-label col-sm-12" for="course_name">User Name</label>
-                    <div class="col-sm-12">
-                      <input type="text" class="form-control" id="" placeholder="User Name" name="username"
-                        required value=''>
+         
+                          <select name="username" class="form-control">
                         
+                            {% for i in r  %}
+                              <option value="{{i.username}}">{{i.username}}</option>
+                  
+                             {% endfor %}
+                          </select>
+                  
                     </div>
                   </div>
                 </div>
               </div>
+              
 
               <div class="row">
                 <div class="col-sm-12">
+              
                   <div class="form-group">
                     <label class="control-label col-sm-12" for="level">First Name</label>
                     <div class="col-sm-12">
@@ -97,6 +108,33 @@ label:after{
                         <div class="col-sm-12">
                           <input type="password" class="form-control" id="" placeholder="Password" name="password"
                             required value=''>
+                            
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="control-label col-sm-12" for="course_name">Upload Image</label>
+                        <div class="col-sm-12">
+                       
+                          <input type="file" id="myfile" name="myfile">
+                            
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="control-label col-sm-12" for="course_name">Add courses Names</label>
+                        <div class="col-sm-12">
+                       
+                          <input type="text" class="form-control" id="" placeholder="Course Name" name="addcourses"
+                          required value=''>
                             
                         </div>
                       </div>

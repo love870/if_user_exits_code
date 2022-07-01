@@ -218,12 +218,24 @@ class Order_Items(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
 
+class classs(models.Model):
+    id = models.AutoField(primary_key=True)
+    name=models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
 class AddStudent(models.Model):
     id = models.AutoField(primary_key=True)
-    username=models.ForeignKey(User,on_delete=models.CASCADE)
+    username=models.ForeignKey(User, related_name='usernames',on_delete=models.CASCADE)
     first_name=models.CharField(max_length=30, null=True)
     last_name=models.CharField(max_length=50)
     password=models.CharField(max_length=50)
+    image_upload= models.FileField(upload_to = 'images',max_length=100,null=True,default=None)
+    students=models.ManyToManyField(classs)
 
 def __str__(self):
    return self.first_name
+
+
+

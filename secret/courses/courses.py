@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from email import message
+from optparse import Values
 from django.contrib import auth
 from django.http import HttpResponse, JsonResponse
 from requests import get
@@ -21,6 +22,8 @@ from secret.serializers.courses import (
     course_fk_check,
     edit_course_serializer,
 )
+from django.conf.urls import static
+from django.conf import settings
 
 from django.http import HttpResponse
 from django.views.generic import View
@@ -34,7 +37,7 @@ from django.template.loader import render_to_string
 from django.template import Context
 from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from secret.models import AddStudent, Courses, CourseLevels, TimePeriods, Course_Classes, Weekdays
+from secret.models import AddStudent, Courses, CourseLevels, TimePeriods, Course_Classes, Weekdays, classs
 from django.conf import settings
 from django.core.mail import send_mail
 from api.models import Profile
@@ -269,6 +272,7 @@ def add_course(request):
             price_per_month = request.POST["price_per_month"].strip()
 
             level = request.POST["level"].strip()
+            print(level,"ooooooo")
 
             if level:
                 level = int(level)
@@ -605,30 +609,69 @@ def convert24AM(str1):
             return b.replace('AM',":00").replace(" ", "")
     
 def addstudent(request):
-    # print("hello")
-    # r=User.objects.get(id=4)
-    # print(r,"-------")
-
+    print("hello")
+    
+   
+    # dr=User.objects.get(id=4)
+    # print(dr,"-------")
+    # r=User.objects.all()
+    # data={"r":r}
+    # g=classs.objects.get(id=1)
+    # print(g,"_________________---")
+    r= User.objects.filter().values("username")
+    print(r)
     if request.method == "POST":
-        username=request.POST.get('username')
-        print(type(username))
+        username=request.POST.get('username')   
         firstname=request.POST.get('firstname')
         lastname=request.POST.get('lastname')
         password=request.POST.get('password')
+        files=request.FILES.get('myfile')
+        addcourses=request.POST.get('addcourses')
+        print(files)
         print(username,firstname,lastname,password)
+        print(addcourses,"ADDCOURSES")
 
         if User.objects.filter(username=username).exists():
-            print("$$$$$$$")
+            # get_username=User.objects.get(id=3)
+            print("$$$$$$$") 
             get_username = User.objects.get(username=username)
-            AddStudent.objects.create(username=get_username, first_name=firstname, last_name=lastname,password=password)
+            AddStudent.objects.create(username=get_username, first_name=firstname, last_name=lastname,password=password,image_upload=files)
+           
+            users=classs.objects.filter(name=addcourses)[0]
+            if users:
+                created = classs.objects.filter(name=addcourses)[0]
+                AddStudent.objects.create(students=created)
+                created.students.add(addcourses)
+                print("trueeeeeee")
+                
+            else:
+                classs.objects.create(name=addcourses)
+                print("falseeeeeee")
+
+            
+
+          
+
             messages.success(request, "added")
 
             
             return render(request,"courses/addstudent.html")
             
         else:
+           
+            print(r)
             print("*******")
-            User.objects.create(username=username,first_name=firstname,last_name=lastname,password=password)
+            classs.objects.create(name=g)
+            User.objects.create(username=username,first_name=firstname,last_name=lastname,password=password,image_upload=files)
+            classs.objects.create(name=addcourses)
+           
             messages.success(request, "created")
             return render(request,"courses/addstudent.html")
-    return render(request,"courses/addstudent.html")
+    return render(request,"courses/addstudent.html",{"r":r})
+
+
+def view_image(request):
+    image=AddStudent.objects.all()
+    context={"image":image}
+
+    return render(request,"courses/view_image.html",context)

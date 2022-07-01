@@ -1,3 +1,4 @@
+from ast import If
 from django.urls import path
 from requests import delete
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -14,7 +15,9 @@ from secret.views import (
     Profile,
     
 )
-from secret.courses.courses import addstudent
+from django.conf import settings
+from django.conf.urls.static import static
+from secret.courses.courses import addstudent,view_image
 
 from secret.users.users import add_user, list_users, delete_user, edit_user
 from secret.courses.courses import add_course, list_courses, delete_course, edit_course, course_class
@@ -24,6 +27,7 @@ from secret.courses.schedules import (
     edit_schedule,
     record_delete,
 )
+from django.conf.urls.static import static
 from secret.classes.classes import list_classes, class_details, class_edit, add_class_schedule
 from secret.payments.payments import order_items, list_payments
 from secret.promocodes.promocodes import (
@@ -54,6 +58,7 @@ urlpatterns = [
     path("list_courses/", list_courses),
     path("course_class/", course_class),
     path("add_student/",addstudent),
+    path("view_image/",view_image),
 
     # class
     path("delete_course/", delete_course),
@@ -81,5 +86,7 @@ urlpatterns = [
  
      
     
-]
+]+ static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
+
 urlpatterns = format_suffix_patterns(urlpatterns)
+ 
